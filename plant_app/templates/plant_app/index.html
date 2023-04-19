@@ -1,0 +1,81 @@
+
+{% load static %}
+<link rel="stylesheet" href="{% static "plant_app/style.css" %}">
+<link rel="stylesheet" href="{% static "plant_app/bootstrap.min.css" %}">
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Plant Diseases</title>
+  </head>
+  <body>
+    <div id='name' class='container'>
+      <header>
+          <h1 id='head1'><strong>Leaf Diseases </h1>
+            <h1 id='head1'><strong>Detection</h1>
+      </header>
+        <p></p>
+    <form method="post" id="fileform" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="file-upload">
+      <div class="file-select">
+          <div class="file-select-button" id="fileName">Choose File</div>
+        <div class="file-select-name" id="noFile">No file chosen...</div>
+        <input id="chooseFile" type="file" name="myfile">
+      </div>
+    </div><br>
+    <button id="sub" class="btn btn-success btn-lg" type="submit">Predict</button>
+  </form>
+
+
+  {% if file_url %}
+ <div style="width:100%;height:400px;display: flex;justify-content:center; align-items: center;flex-direction: column;">
+  <h1 id='filename'><strong>{{ result }}</h1>
+    <img src="data:image/png;base64,{{file_url}}" style="width:224px;height:224px;"><br><br>
+    <a href="https://en.wikipedia.org/wiki/{{result}}" class="btn btn-warning" >More Details</a>
+ </div>
+
+  {% endif %}
+
+    </div>
+  </body>
+  <script type="text/javascript" src="{% static 'plant_app/jQuery.js' %}"></script>
+  <script type="text/javascript" src="{% static 'plant_app/effect.js' %}"></script>
+
+  <script>
+    $('#chooseFile').bind('change', function () {
+    var filename = $("#chooseFile").val();
+    if (/^\s*$/.test(filename)) {
+      $(".file-upload").removeClass('active');
+      $("#noFile").text("No file or Invalid File "); 
+    }
+    else {
+      $(".file-upload").addClass('active');
+      $("#noFile").text(filename.replace("C:\\fakepath\\", "")); 
+    }
+  });
+  let ele = document.getElementById('fileform')
+  console.log(ele);
+      ele.addEventListener('submit',function(e){
+          let filename = $("#chooseFile").val();
+          let v = filename.split('.')
+
+          if(filename.length==0){
+            alert("File not selected")
+            e.preventDefault()
+          }
+          else{
+            
+            if(v[v.length-1].includes('jpg') || v[v.length-1].includes('jpeg') || v[v.length-1].includes('png') || v[v.length-1].includes('png') ){
+                console.log('ad');
+            }
+            else{
+              alert("Invalid File ")
+              
+              e.preventDefault()
+            }
+          }
+      })
+  </script>
+</html>
+
